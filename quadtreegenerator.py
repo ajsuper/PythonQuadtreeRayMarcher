@@ -347,7 +347,7 @@ while True:
     Frames = Frames + 1
     for event in pygame.event.get():
         if event.type == QUIT:
-            with open("C:\\Users\\Andrew\\Documents\\QuadtreePythonTestFile.txt", "w") as file:
+            with open("Quadtree.txt", "w") as file:
                 new_content = str(artificalMemory)
                 file.write(new_content)
                 file.close()

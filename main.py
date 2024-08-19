@@ -26,7 +26,7 @@ rayDirection = normalize([-1, 1])
 wholeBoxStack = []
 
 
-with open('C:\\Users\\Andrew\\Documents\\QuadtreePythonTestFile.txt', 'r') as file:
+with open('Quadtree.txt', 'r') as file:
     # Read the entire file content
     content = file.read()
     # Use ast.literal_eval to convert the string back to a Python object
