@@ -447,7 +447,7 @@ def doABunchOfRays(pointDirection, pointOrigin, numRays, fov, mode, timecount, t
         rayStuff = [direction, pygame.mouse.get_pos()]
 
         degrees = math.radians(timecount)
-        t = nAABBIntersect([500, 500, 500, [math.cos(degrees), math.sin(degrees), -math.sin(degrees), math.cos(degrees)]], rayStuff)
+        t = nAABBIntersect([0, 0, 1024, [math.cos(degrees), math.sin(degrees), -math.sin(degrees), math.cos(degrees)]], rayStuff)
         drawRayLine(rayStuff[0], rayStuff[1], t)
         pygame.draw.rect(screen, (255, 0, 0), Rect(rayStuff[1][0]+rayStuff[0][0]*t, rayStuff[1][1]+rayStuff[0][1]*t, 5, 5), 0)
     end = time.time()
@@ -470,7 +470,7 @@ def followMouse(rayStuff):
     rayOri = [x, y]
 
     #rayDir = normalize([mousePos[0]-rayOri[0], mousePos[1]-rayOri[1]])
-    rayStuff = [[-1, 0], rayOri]
+    rayStuff = [normalize([0, 1]), rayOri]
     return rayStuff
 
 def drawRayLine(rayDir, rayOri, t):
