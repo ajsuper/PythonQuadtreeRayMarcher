@@ -8,7 +8,7 @@ import ast
 import time
 
 pygame.init()
-width, height = 1024, 1024
+width, height = 1440, 1440
 screen = pygame.display.set_mode((width, height))
 
 def normalize(vector2D):
@@ -274,7 +274,7 @@ def actualCastRay(rayStuff, box, uv):
     keepGoing = True
 
     for steps in range(0, 100):
-        #pygame.draw.rect(screen, (0, 200, 200), Rect(boxStack[-1][0], boxStack[-1][1], boxStack[-1][2], boxStack[-1][2]), 1)
+        #pygame.draw.rect(screen, (0, 50, 50), Rect(boxStack[-1][0], boxStack[-1][1], boxStack[-1][2], boxStack[-1][2]), 1)
         if keepGoing == False:
             break
         pushDat = newPush(boxStack, nodeStack, quadStack, rayStuff)
@@ -431,7 +431,8 @@ def nAABBIntersect(nAABB, rayStuff):
         intersectPointInTransform = [newPoint[0]+newDir[0]*intersectData[0], newPoint[1]+newDir[1]*intersectData[0]]
         uv = [(intersectPointInTransform[0]-AABB[0])/AABB[2], (intersectPointInTransform[1] - AABB[1])/AABB[2]]
         transformRayStuff = [newDir, newPoint]
-        t = actualCastRay(transformRayStuff, AABB, uv)
+        #t = actualCastRay(transformRayStuff, AABB, uv)
+        t = normalCastRay(rayStuff)
         if t > 10000:
             t = 10000
     return t
@@ -445,9 +446,8 @@ def doABunchOfRays(pointDirection, pointOrigin, numRays, fov, mode, timecount, t
         angle = -half_fov + i * angle_increment
         direction = rotate_vector(normalized_direction, angle)
         rayStuff = [direction, pygame.mouse.get_pos()]
-
-        degrees = math.radians(timecount)
-        t = nAABBIntersect([0, 0, 1024, [math.cos(degrees), math.sin(degrees), -math.sin(degrees), math.cos(degrees)]], rayStuff)
+        degrees = math.radians(0)
+        t = nAABBIntersect([0, 0, width, [math.cos(degrees), math.sin(degrees), -math.sin(degrees), math.cos(degrees)]], rayStuff)
         drawRayLine(rayStuff[0], rayStuff[1], t)
         pygame.draw.rect(screen, (255, 0, 0), Rect(rayStuff[1][0]+rayStuff[0][0]*t, rayStuff[1][1]+rayStuff[0][1]*t, 5, 5), 0)
     end = time.time()
@@ -478,8 +478,17 @@ def drawRayLine(rayDir, rayOri, t):
     endPoint = [0]*2
     endPoint[0] = (rayOri[0] + rayDir[0]*t)
     endPoint[1] = (rayOri[1] + rayDir[1]*t)
-    pygame.draw.line(screen, (25, 25, 25), (int(startPoint[0]), int(startPoint[1])), (int(endPoint[0]), int(endPoint[1])))
+    pygame.draw.line(screen, (80, 80, 80), (int(startPoint[0]), int(startPoint[1])), (int(endPoint[0]), int(endPoint[1])))
 
+def normalCastRay(rayStuff):
+    t = 10000
+    for i in range(0, len(wholeBoxStack)):
+        box = wholeBoxStack[i]
+        intersectDat = calculateBoxIntersect(box[0], box[0]+box[2], box[1], box[1]+box[2], rayStuff[0], rayStuff[1])
+        t = min(t, intersectDat[0])
+    return t
+
+render_quadtree_box(0, 0, 0, width, 0)
 timecount = 0
 timebeforedivide = 0
 while True:
@@ -502,7 +511,7 @@ while True:
         box = wholeBoxStack[i]
         #pygame.draw.rect(screen, (0, 255, 255), Rect(box[0], box[1], box[2], box[2]), 1)
 
-    doABunchOfRays(rayStuff[0], rayStuff[1], 300, 3, 0, timecount, timebeforedivide)
+    doABunchOfRays(rayStuff[0], rayStuff[1], 400, 6.28, 1024, timecount, timebeforedivide)
 
     #t = actualCastRay(rayStuff, 0)
     #drawRayLine(rayStuff[0], rayStuff[1], t)
