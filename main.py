@@ -431,8 +431,8 @@ def nAABBIntersect(nAABB, rayStuff):
         intersectPointInTransform = [newPoint[0]+newDir[0]*intersectData[0], newPoint[1]+newDir[1]*intersectData[0]]
         uv = [(intersectPointInTransform[0]-AABB[0])/AABB[2], (intersectPointInTransform[1] - AABB[1])/AABB[2]]
         transformRayStuff = [newDir, newPoint]
-        #t = actualCastRay(transformRayStuff, AABB, uv)
-        t = normalCastRay(rayStuff)
+        t = actualCastRay(transformRayStuff, AABB, uv)
+        #t = normalCastRay(transformRayStuff)
         if t > 10000:
             t = 10000
     return t
